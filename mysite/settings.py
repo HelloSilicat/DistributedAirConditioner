@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'testdjango',
+        'NAME': 'AirConditioner',
         'USER':"root",
         'PASSWORD':'123456',
-        'HOST':'127.0.0.1',
+        'HOST':'47.100.97.152',#'127.0.0.1',
         'PORT':'3306'
     }
 }
@@ -115,13 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

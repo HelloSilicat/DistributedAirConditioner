@@ -6,9 +6,13 @@ from django.shortcuts import render
 from Logger import models
 
 def test(request):
-	logInfo = {'roomid':'309c', 'temperature':25, 'windspeed':2, 'status':"HOT", 'logtype':'LOG_OTHER', 'flag':"check_out"}
+	p = ['roomid','temperature','windspeed','status','logtype','flag']
+	logInfo = {}
+	for k in p:
+		logInfo[k] = request.GET.get(k, None)
+	#logInfo = {'roomid':'309c', 'temperature':25, 'windspeed':2, 'status':"HOT", 'logtype':'LOG_OTHER', 'flag':"check_out"}
 	models.RunLog.objects.create(**logInfo)
-	return render(request, "test.html")
+	return JsonResponse(logInfo)
 
 def LoggerQueryReport(request):
 	qtype = request.GET.get("qtype", None)  
@@ -31,10 +35,14 @@ def LoggerPrintReport(request):
 
 	stat.handleStatProcess()
 	data = stat.printStatResult()
-	file = open("report.csv", "a+") 
+
+	file = open("report.csv", "w") 
 	file.write(data)
+	file.close()
+
+	file = open("report.csv","rb")
 	response = FileResponse(file)
-	response['Content-Type'] = 'application/octet-stream'
+	response['Content-Type'] = 'text/csv'
 	response['Content-Disposition'] = 'attachment;filename="report.csv"'
 
 	return response
@@ -54,10 +62,14 @@ def LoggerPrintInvoice(request):
 
 	stat.handleStatProcess()
 	data = stat.printStatResult()
-	file = open("invoice.csv", "a+")
+
+	file = open("invoice.csv", "w")
 	file.write(data)
+	file.close()
+
+	file = open("invoice.csv", "rb")
 	response = FileResponse(file)
-	response['Content-Type'] = 'application/octet-stream'
+	response['Content-Type'] = 'text/csv'
 	response['Content-Disposition'] = 'attachment;filename="invoice.csv"'
 
 	return response
@@ -78,8 +90,11 @@ def LoggerPrintRdr(request):
 
 	stat.handleStatProcess()
 	data = stat.printStatResult()
-	file = open("record.csv", "a+")
+	file = open("record.csv", "w")
 	file.write(data)
+	file.close()
+
+	file = open("record.csv", "rb")
 	response = FileResponse(file)
 	response['Content-Type'] = 'application/octet-stream'
 	response['Content-Disposition'] = 'attachment;filename="record.csv"'
